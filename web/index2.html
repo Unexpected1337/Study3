@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Players</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script>
+
+            $(document).ready(function () {
+                $("#btn").click(getPlayer);
+
+            });
+
+
+            function getPlayer() {
+                var request = $.ajax({
+                    url: "api/AllPlayerNames",
+                    dataType: "json",
+                });
+                request.done(function (links) {
+
+                    // Declare string
+                    // Start tags for table
+
+                    for (var i = 0; i < links.length; i++) {
+                        var li;
+                        li = "ID: " + "<tr>"  + "<td>" + links[i].id + "</td>" + "Name: " + "<td>" + links[i].name + "</td>" + " Country: " + "<td>" + links[i].country + "</td>" + "</tr>";
+                        $("#Players").append(li);
+                    }
+                    // End tags for table
+
+
+                });
+                request.fail(function (jqXHR, textStatus) {
+                    alert("Request Failed: " + textStatus);
+
+
+                });
+
+
+            }
+
+        </script>
+    </head>
+    <body>
+        <h1>Players</h1>
+
+        <input type="submit" id="btn" value="Find Player">
+        <table id="Players" style="border: 1px;">
+
+        </table>
+
+        <br/>
+
+    </body>
+</html>

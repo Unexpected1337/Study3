@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Players</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script>
+
+            $(document).ready(function () {
+                $("#btn").click(getAllPlayer);
+
+            });
+            $(document).ready(function () {
+                $("#btnFindPlayer").click(getPlayer);
+            });
+
+            $(document).ready(function () {
+                $("#btnFindCountry").click(getCountry);
+            });
+                function getCountry() {
+
+                var country = document.getElementById("countryfield").value;
+
+                var request = $.ajax({
+                    url: "api/PlayersFromWeb",
+                    dataType: "json",
+                });
+
+                request.done(function (links) {
+
+                    $("#Players").append("<tr><th>ID</th><th>Name</th><th>Country</th><th>Small Flag</th><th>Large Flag</th></tr>");
+
+                    for (var i = 0; i < links.length; i++) {
+                        var currentCountry = links[i].sCountryName;
+
+                        if (currentCountry === country) {
+                            var li = "<tr>" + "<td>" + links[i].iId + "</td><td>" + links[i].sName + "</td><td>" + links[i].sCountryName + "</td><td>" + "<img src=\"" + links[i].sCountryFlag + "\">" + "</td><td>" + "<img src=\"" + links[i].sCountryFlagLarge + "\">" + "</td></tr>"
+                            $("#Players").append(li);
+                        }
+                    }
+
+                });
+
+                request.fail(function (jqXHR, textStatus) {
+                    alert("Request failed: " + textStatus);
+                });
+
+            }
+
+            function getPlayer() {
+
+                var player = document.getElementById("playerfield").value;
+                console.log(player);
+                var request = $.ajax({
+                    url: "api/PlayersFromWeb",
+                    dataType: "json",
+                });
+
+                request.done(function (links) {
+                  
+                    $("#Players").append("<tr><th>ID</th><th>Name</th><th>Country</th><th>Small Flag</th><th>Large Flag</th></tr>");
+                    
+                    for (var i = 0; i < links.length; i++) {
+                  
+                        var currentPlayer = links[i].sName;
+                        console.log(currentPlayer);
+                        if (currentPlayer === player) {
+                            var li = "<tr>" + "<td>" + links[i].iId + "</td><td>" + links[i].sName + "</td><td>" + links[i].sCountryName + "</td><td>" + "<img src=\"" + links[i].sCountryFlag + "\">" + "</td><td>" + "<img src=\"" + links[i].sCountryFlagLarge + "\">" + "</td></tr>"
+                            $("#Players").append(li);
+                        }
+                    }
+
+                });
+
+                request.fail(function (jqXHR, textStatus) {
+                    alert("Request failed: " + textStatus);
+                });
+
+            }
+
+            function getAllPlayer() {
+                var request = $.ajax({ 
+                    url: "api/PlayersFromWeb",
+                    dataType: "json",
+                });
+                request.done(function (links) {
+
+                    // Declare string
+                    // Start tags for table
+
+                    for (var i = 0; i < links.length; i++) {
+                        var li = "<tr>" + "<td>" + links[i].iId + "</td><td>" + links[i].sName + "</td><td>" + links[i].sCountryName + "</td><td>" + "<img src=\"" + links[i].sCountryFlag + "\">" + "</td><td>" + "<img src=\"" + links[i].sCountryFlagLarge + "\">" + "</td></tr>"
+                        $("#Players").append(li);
+                    }
+                    // End tags for table
+        
+                });
+                request.fail(function (jqXHR, textStatus) {
+                    alert("Request Failed: " + textStatus);
+
+
+                });
+
+
+            }
+
+        </script>
+    </head>
+    <body>
+         <h1>Show Players</h1>
+        <input type="submit" id="btn" value="Get All Players">
+        <br>
+        <input type="text" id="playerfield">
+        <input type="submit" id="btnFindPlayer" value="Find Player">
+        <br>
+        <input type="text" id="countryfield">
+        <input type="submit" id="btnFindCountry" value="Find Country">
+
+        <table class="table table-bordered" style="width: 60%" id="Players"></table>
+
+    </body>
+</html>
